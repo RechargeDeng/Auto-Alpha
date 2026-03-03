@@ -1,0 +1,201 @@
+{
+  "timestamp": "2026-02-26T15:03:49.453751",
+  "iteration": 47,
+  "seed_alphas": [
+    {
+      "alphaID": "alpha_01_aggr_imbalance_persistence",
+      "expr": "wdirect{tsdelta{SpreadOrder.BuyVolume_Stability,24}}",
+      "desc": "Continuation proxy: persistent buy-vs-sell aggressor dominance measured by the trend in buy-vs-sell volume stability spread for spread-crossing orders (captures meta-order style persistence).",
+      "used_fields": [
+        "SpreadOrder.BuyVolume_Stability"
+      ],
+      "used_operators": [
+        "wdirect",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_02_sell_pressure_persistence",
+      "expr": "wdirect{tsdelta{SpreadOrder.SellVolume_Stability,24}}",
+      "desc": "Continuation proxy on the sell side: increasing instability/shift in sell aggressor flow (via change in sell volume stability) tends to align with short-horizon continuation in the direction of persistent selling pressure.",
+      "used_fields": [
+        "SpreadOrder.SellVolume_Stability"
+      ],
+      "used_operators": [
+        "wdirect",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_03_imbalance_x_order_submission_surge_proxy",
+      "expr": "tscorr{tsdelta{SpreadOrder.BuyVolume_Stability,24},tsdelta{SpreadOrder_vs_OrderLine.BuyVolume_Mean_Ratio,24},240}",
+      "desc": "Interaction proxy for imbalance + order-submission expansion: when spread-crossing flow becomes more buy-dominant while also diverging from overall order submission patterns (SpreadOrder vs OrderLine mean ratio), continuation is more likely.",
+      "used_fields": [
+        "SpreadOrder.BuyVolume_Stability",
+        "SpreadOrder_vs_OrderLine.BuyVolume_Mean_Ratio"
+      ],
+      "used_operators": [
+        "tscorr",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_04_aggr_fill_efficiency_reversion_gate",
+      "expr": "tsregres{SpreadOrder_vs_TradeLine.Volume_Mean_Ratio,SpreadCancel.Price_Stability,240}",
+      "desc": "Mean-reversion gate: low conversion (SpreadOrder_vs_TradeLine.Volume_Mean_Ratio high) coupled with unstable/cancel-like price stability indicates transient impact more likely to revert after the initial move.",
+      "used_fields": [
+        "SpreadOrder_vs_TradeLine.Volume_Mean_Ratio",
+        "SpreadCancel.Price_Stability"
+      ],
+      "used_operators": [
+        "tsregres"
+      ]
+    },
+    {
+      "alphaID": "alpha_05_aggr_vs_trade_divergence",
+      "expr": "tscorr{SpreadOrder_vs_TradeLine.Volume_Skew_Ratio,tsdelta{SpreadOrder.Price_Stability,24},360}",
+      "desc": "Fragmentation indicator: when spread-crossing order volume distribution deviates from executed trade distribution (skew ratio) while price stability in orders changes, it signals unfilled probing and later reversal risk.",
+      "used_fields": [
+        "SpreadOrder_vs_TradeLine.Volume_Skew_Ratio",
+        "SpreadOrder.Price_Stability"
+      ],
+      "used_operators": [
+        "tscorr",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_06_cancel_dominance_vs_order_flow",
+      "expr": "wdirect{tsdelta{SpreadCancel_vs_SpreadOrder.BuyVolume_Skew_Ratio,24}}",
+      "desc": "Reversion tilt: rising cancel-vs-order skew relative to spread orders suggests low fill efficiency and temporary pressure that tends to mean-revert once liquidity replenishes.",
+      "used_fields": [
+        "SpreadCancel_vs_SpreadOrder.BuyVolume_Skew_Ratio"
+      ],
+      "used_operators": [
+        "wdirect",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_07_buy_sell_price_stability_spread",
+      "expr": "tsregres{SpreadOrder.SellPrice_Stability,SpreadOrder.BuyPrice_Stability,240}",
+      "desc": "Imbalance proxy via quote-taking pressure: widening divergence between buy and sell price stability for spread-crossing orders reflects directional aggressor pressure that can drive near-term continuation.",
+      "used_fields": [
+        "SpreadOrder.SellPrice_Stability",
+        "SpreadOrder.BuyPrice_Stability"
+      ],
+      "used_operators": [
+        "tsregres"
+      ]
+    },
+    {
+      "alphaID": "alpha_08_order_value_pressure_shift",
+      "expr": "wdirect{SpreadOrder.Value_Stability}",
+      "desc": "Demand shock proxy: a strong trend in spread-crossing value stability (monetary intensity consistency) indicates sustained meta-order execution and short-horizon continuation.",
+      "used_fields": [
+        "SpreadOrder.Value_Stability"
+      ],
+      "used_operators": [
+        "wdirect"
+      ]
+    },
+    {
+      "alphaID": "alpha_09_low_fill_efficiency_late_reversion",
+      "expr": "tscorr{SpreadOrder_vs_TradeLine.Volume_Mean_Ratio,tsdelta{SpreadCancel.Duration_Stability,24},480}",
+      "desc": "Late reversion proxy: high SpreadOrder-to-Trade mean ratio (low conversion) combined with increasing cancel duration instability implies fleeting liquidity-taking; tends to revert over longer horizons.",
+      "used_fields": [
+        "SpreadOrder_vs_TradeLine.Volume_Mean_Ratio",
+        "SpreadCancel.Duration_Stability"
+      ],
+      "used_operators": [
+        "tscorr",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_10_aggr_buy_vs_trade_buy_value_divergence",
+      "expr": "tsregres{SpreadOrder_vs_TradeLine.BuyValue_Mean_Ratio,tsdelta{SpreadOrder.BuyValue_Stability,24},240}",
+      "desc": "Fill-efficiency refinement: divergence between buy-side value in aggressive orders vs executed trades (BuyValue_Mean_Ratio) aligned with changes in buy value stability flags temporary impact and subsequent mean reversion.",
+      "used_fields": [
+        "SpreadOrder_vs_TradeLine.BuyValue_Mean_Ratio",
+        "SpreadOrder.BuyValue_Stability"
+      ],
+      "used_operators": [
+        "tsregres",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_11_orderline_linked_volume_surge_proxy",
+      "expr": "wdirect{tsdelta{SpreadOrder_vs_OrderLine.Volume_Skew_Ratio,24}}",
+      "desc": "Order-submission surge proxy: when SpreadOrder vs OrderLine volume skew ratio rises and is persistent (trend), it indicates a burst of small child orders relative to baseline submissions, supporting short-horizon continuation.",
+      "used_fields": [
+        "SpreadOrder_vs_OrderLine.Volume_Skew_Ratio"
+      ],
+      "used_operators": [
+        "wdirect",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_12_asymmetric_buy_informativeness",
+      "expr": "tscorr{SpreadOrder_vs_TradeLine.BuyVolume_Skew_Ratio,SpreadOrder_vs_TradeLine.BuyPrice_Mean_Ratio,360}",
+      "desc": "Asymmetry in aggressor informativeness: correlation between buy-side skew divergence (SpreadOrder vs TradeLine) and buy price mean divergence tends to rise when aggressive buys are informative; supports continuation regime identification.",
+      "used_fields": [
+        "SpreadOrder_vs_TradeLine.BuyVolume_Skew_Ratio",
+        "SpreadOrder_vs_TradeLine.BuyPrice_Mean_Ratio"
+      ],
+      "used_operators": [
+        "tscorr"
+      ]
+    },
+    {
+      "alphaID": "alpha_13_sell_side_low_conversion_indicator",
+      "expr": "tscorr{SpreadOrder_vs_TradeLine.SellVolume_Mean_Ratio,tsdelta{SpreadOrder.SellPrice_Stability,24},360}",
+      "desc": "Sell-side low conversion: high sell mean ratio (orders vs trades) with rising sell-side price instability suggests transient selling pressure that later mean-reverts.",
+      "used_fields": [
+        "SpreadOrder_vs_TradeLine.SellVolume_Mean_Ratio",
+        "SpreadOrder.SellPrice_Stability"
+      ],
+      "used_operators": [
+        "tscorr",
+        "tsdelta"
+      ]
+    },
+    {
+      "alphaID": "alpha_14_cancel_vs_orderline_fragmentation_proxy",
+      "expr": "tsregres{SpreadCancel_vs_OrderLine.Volume_Skew_Ratio,wdirect{SpreadOrder.Volume_Stability},240}",
+      "desc": "Fragmentation proxy: rising cancel-vs-orderline volume skew ratio implies more submitted volume failing to execute; predicts weaker continuation and higher subsequent reversion risk.",
+      "used_fields": [
+        "SpreadCancel_vs_OrderLine.Volume_Skew_Ratio",
+        "SpreadOrder.Volume_Stability"
+      ],
+      "used_operators": [
+        "tsregres",
+        "wdirect"
+      ]
+    },
+    {
+      "alphaID": "alpha_15_aggressive_flow_temporal_dependence",
+      "expr": "tsautocorr{SpreadOrder.Volume_Stability,24,240}",
+      "desc": "Temporal persistence of aggressive flow: higher autocorrelation in spread-crossing order volume stability indicates ongoing meta-order execution, supporting near-term continuation.",
+      "used_fields": [
+        "SpreadOrder.Volume_Stability"
+      ],
+      "used_operators": [
+        "tsautocorr"
+      ]
+    },
+    {
+      "alphaID": "alpha_16_cancel_flow_temporal_dependence",
+      "expr": "tsautocorr{SpreadCancel.Volume_Stability,24,240}",
+      "desc": "Temporal persistence of cancel activity: autocorrelation in cancel volume stability highlights repeated unfilled attempts and liquidity probing; aligns with transient impact and later reversal.",
+      "used_fields": [
+        "SpreadCancel.Volume_Stability"
+      ],
+      "used_operators": [
+        "tsautocorr"
+      ]
+    }
+  ]
+}

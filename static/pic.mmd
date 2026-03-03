@@ -1,0 +1,36 @@
+flowchart TD
+
+    U[User Trading Idea]
+
+    H[Hypothesis Agent]
+    
+    KB1[(Alpha Knowledge Base)]
+    KB2[(Academic Paper Knowledge Base)]
+    KB3[(Field Description Knowledge Base)]
+
+    G[Alpha Generator Agent]
+
+    KB4[(Operator Knowledge Base)]
+    KB5[(Field Knowledge Base)]
+
+    B[Backtesting System]
+
+    E[Alpha Evaluator Agent]
+
+    U --> H
+
+    KB1 --> H
+    KB2 --> H
+    KB3 --> H
+
+    H -->|Refined / New Hypothesis| G
+
+    KB4 --> G
+    KB5 --> G
+
+    G -->|Alpha Formula| B
+    B -->|Backtest Results| E
+
+    E -->|Transferable Insights| G
+
+    E -->|Fail × 3| H

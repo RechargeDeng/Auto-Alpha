@@ -1,0 +1,73 @@
+{"name":"neg","category":"unary","arity":1,"signature":"neg{arr}","parameter_types":["array"],"description":"Element-wise negation of the input array.","constraints":[],"semantic_text":"negation sign inversion elementwise transform","examples":["neg{OrderLine.Value_Stability}"]}
+{"name":"absv","category":"unary","arity":1,"signature":"absv{arr}","parameter_types":["array"],"description":"Element-wise absolute value of the input array.","constraints":[],"semantic_text":"absolute value magnitude elementwise","examples":["absv{TradeLine.Volume_Stability}"]}
+{"name":"logv","category":"unary","arity":1,"signature":"logv{arr}","parameter_types":["array"],"description":"Applies signed logarithm to the input array: log for positive values and negative log for negative values.","constraints":["values must be non-zero"],"semantic_text":"signed logarithm nonlinear scaling","examples":["logv{OrderLine.Value_Stability}"]}
+
+{"name":"powv","category":"unary_ts","arity":2,"signature":"powv{arr,num}","parameter_types":["array","float"],"description":"Raises each element of the array to the given power.","constraints":[],"semantic_text":"power transform nonlinear scaling","examples":["powv{TradeLine.Volume_Stability,2}"]}
+
+{"name":"tskurtosis","category":"unary_ts","arity":2,"signature":"tskurtosis{arr,window}","parameter_types":["array","int"],"description":"Computes rolling kurtosis over a sliding window for each column.","constraints":["window > 100"],"semantic_text":"rolling kurtosis tail risk distribution shape","examples":["tskurtosis{OrderLine.Volume_Stability,200}"]}
+
+{"name":"tsskew","category":"unary_ts","arity":2,"signature":"tsskew{arr,window}","parameter_types":["array","int"],"description":"Computes rolling skewness over a sliding window for each column.","constraints":["window > 100"],"semantic_text":"rolling skewness asymmetry distribution","examples":["tsskew{OrderLine.Value_Stability,200}"]}
+
+{"name":"tsmean","category":"unary_ts","arity":2,"signature":"tsmean{arr,window}","parameter_types":["array","int"],"description":"Computes rolling mean over a sliding window for each column.","constraints":["window > 1"],"semantic_text":"rolling mean smoothing average","examples":["tsmean{TradeLine.Volume_Stability,20}"]}
+
+{"name":"tsstd","category":"unary_ts","arity":2,"signature":"tsstd{arr,window}","parameter_types":["array","int"],"description":"Computes rolling standard deviation over a sliding window for each column.","constraints":["window > 1"],"semantic_text":"rolling volatility standard deviation","examples":["tsstd{TradeLine.Value_Stability,20}"]}
+
+{"name":"tspct","category":"unary_ts","arity":2,"signature":"tspct{arr,lag}","parameter_types":["array","int"],"description":"Computes percentage change relative to a lagged value.","constraints":["lag >= 1"],"semantic_text":"percentage change momentum rate of change","examples":["tspct{OrderLine.Value_Stability,5}"]}
+
+{"name":"tsdelay","category":"unary_ts","arity":2,"signature":"tsdelay{arr,lag}","parameter_types":["array","int"],"description":"Shifts the array downward along the time axis by a fixed lag.","constraints":["lag >= 1"],"semantic_text":"time delay lag shift","examples":["tsdelay{TradeLine.Volume_Stability,10}"]}
+
+{"name":"tsdelta","category":"unary_ts","arity":2,"signature":"tsdelta{arr,lag}","parameter_types":["array","int"],"description":"Computes absolute change relative to a lagged value.","constraints":["lag >= 1"],"semantic_text":"absolute change difference momentum","examples":["tsdelta{OrderLine.Value_Stability,5}"]}
+
+{"name":"tsmax","category":"unary_ts","arity":2,"signature":"tsmax{arr,window}","parameter_types":["array","int"],"description":"Computes rolling maximum over a sliding window.","constraints":["window > 1"],"semantic_text":"rolling max extreme value","examples":["tsmax{TradeLine.Volume_Stability,20}"]}
+
+{"name":"tsmin","category":"unary_ts","arity":2,"signature":"tsmin{arr,window}","parameter_types":["array","int"],"description":"Computes rolling minimum over a sliding window.","constraints":["window > 1"],"semantic_text":"rolling min extreme value","examples":["tsmin{TradeLine.Volume_Stability,20}"]}
+
+{"name":"tsmaxpos","category":"unary_ts","arity":2,"signature":"tsmaxpos{arr,window}","parameter_types":["array","int"],"description":"Returns the relative position of the maximum value within a rolling window.","constraints":["window > 1"],"semantic_text":"argmax position timing","examples":["tsmaxpos{TradeLine.Volume_Stability,20}"]}
+
+{"name":"tsminpos","category":"unary_ts","arity":2,"signature":"tsminpos{arr,window}","parameter_types":["array","int"],"description":"Returns the relative position of the minimum value within a rolling window.","constraints":["window > 1"],"semantic_text":"argmin position timing","examples":["tsminpos{TradeLine.Volume_Stability,20}"]}
+
+{"name":"wdirect","category":"unary_ts","arity":2,"signature":"wdirect{arr,window}","parameter_types":["array","int"],"description":"Applies linearly increasing weights in a rolling window and normalizes the result to measure trend direction and strength.","constraints":["window > 1"],"semantic_text":"trend direction weighted momentum","examples":["wdirect{TradeLine.Price_Stability,20}"]}
+
+{"name":"tsrank","category":"unary_ts","arity":2,"signature":"tsrank{arr,window}","parameter_types":["array","int"],"description":"Computes the relative rank of the current value within a rolling window.","constraints":["window > 1"],"semantic_text":"time series rank percentile","examples":["tsrank{OrderLine.Volume_Stability,20}"]}
+
+{"name":"tsautocorr","category":"unary_ts2","arity":3,"signature":"tsautocorr{arr,lag,window}","parameter_types":["array","int","int"],"description":"Computes rolling autocorrelation between the series and its lagged version.","constraints":["lag < window","window > 1"],"semantic_text":"autocorrelation temporal dependency","examples":["tsautocorr{TradeLine.Volume_Stability,5,50}"]}
+
+{"name":"tsfftreal","category":"unary_ts2","arity":3,"signature":"tsfftreal{arr,window,pos}","parameter_types":["array","int","int"],"description":"Extracts the real (cosine) FFT component at a given frequency position.","constraints":["pos < window"],"semantic_text":"fft real component frequency domain","examples":["tsfftreal{TradeLine.Volume_Stability,64,3}"]}
+
+{"name":"tsfftimag","category":"unary_ts2","arity":3,"signature":"tsfftimag{arr,window,pos}","parameter_types":["array","int","int"],"description":"Extracts the imaginary (sine) FFT component at a given frequency position.","constraints":["pos < window"],"semantic_text":"fft imaginary component frequency domain","examples":["tsfftimag{TradeLine.Volume_Stability,64,3}"]}
+
+{"name":"tshpf","category":"unary_ts2","arity":3,"signature":"tshpf{arr,window,cutoff}","parameter_types":["array","int","int"],"description":"Applies a high-pass filter to remove low-frequency components.","constraints":["cutoff < window"],"semantic_text":"high pass filter noise extraction","examples":["tshpf{TradeLine.Price_Stability,64,5}"]}
+
+{"name":"tslpf","category":"unary_ts2","arity":3,"signature":"tslpf{arr,window,cutoff}","parameter_types":["array","int","int"],"description":"Applies a low-pass filter to remove high-frequency components.","constraints":["cutoff < window"],"semantic_text":"low pass filter trend extraction","examples":["tslpf{TradeLine.Price_Stability,64,5}"]}
+
+{"name":"tsquantile","category":"unary_ts2","arity":3,"signature":"tsquantile{arr,delay,q}","parameter_types":["array","int","float"],"description":"Computes the rolling quantile value within a window defined by delay.","constraints":["0 < q < 1"],"semantic_text":"rolling quantile distribution","examples":["tsquantile{TradeLine.Volume_Stability,20,0.9}"]}
+
+{"name":"tsquantileupmean","category":"unary_ts2","arity":3,"signature":"tsquantileupmean{arr,delay,q}","parameter_types":["array","int","float"],"description":"Computes the mean of values above a given quantile within a rolling window.","constraints":["0 < q < 1"],"semantic_text":"upper tail mean extreme behavior","examples":["tsquantileupmean{TradeLine.Volume_Stability,20,0.8}"]}
+
+{"name":"tsquantiledownmean","category":"unary_ts2","arity":3,"signature":"tsquantiledownmean{arr,delay,q}","parameter_types":["array","int","float"],"description":"Computes the mean of values below a given quantile within a rolling window.","constraints":["0 < q < 1"],"semantic_text":"lower tail mean extreme behavior","examples":["tsquantiledownmean{TradeLine.Volume_Stability,20,0.2}"]}
+
+{"name":"add","category":"binary","arity":2,"signature":"add{arr_a,arr_b}","parameter_types":["array","array"],"description":"Element-wise addition of two arrays.","constraints":["arrays must have the same shape"],"semantic_text":"addition combine signals","examples":["add{OrderLine.Value_Stability,TradeLine.Value_Stability}"]}
+
+{"name":"prod","category":"binary","arity":2,"signature":"prod{arr_a,arr_b}","parameter_types":["array","array"],"description":"Element-wise multiplication of two arrays.","constraints":["arrays must have the same shape"],"semantic_text":"multiplicative interaction","examples":["prod{OrderLine.Volume_Stability,TradeLine.Volume_Stability}"]}
+
+{"name":"minus","category":"binary","arity":2,"signature":"minus{arr_a,arr_b}","parameter_types":["array","array"],"description":"Element-wise subtraction of two arrays.","constraints":["arrays must have the same shape"],"semantic_text":"difference spread","examples":["minus{OrderLine.Value_Stability,TradeLine.Value_Stability}"]}
+
+{"name":"div","category":"binary","arity":2,"signature":"div{arr_a,arr_b}","parameter_types":["array","array"],"description":"Element-wise division of two arrays.","constraints":["denominator must be non-zero"],"semantic_text":"ratio normalization","examples":["div{OrderLine.Volume_Stability,TradeLine.Volume_Stability}"]}
+
+{"name":"lt","category":"binary","arity":2,"signature":"lt{arr_a,arr_b}","parameter_types":["array","array"],"description":"Returns 1 where arr_a < arr_b, otherwise 0.","constraints":[],"semantic_text":"less than comparison","examples":["lt{OrderLine.Value_Stability,TradeLine.Value_Stability}"]}
+
+{"name":"le","category":"binary","arity":2,"signature":"le{arr_a,arr_b}","parameter_types":["array","array"],"description":"Returns 1 where arr_a <= arr_b, otherwise 0.","constraints":[],"semantic_text":"less equal comparison","examples":["le{OrderLine.Value_Stability,TradeLine.Value_Stability}"]}
+
+{"name":"gt","category":"binary","arity":2,"signature":"gt{arr_a,arr_b}","parameter_types":["array","array"],"description":"Returns 1 where arr_a > arr_b, otherwise 0.","constraints":[],"semantic_text":"greater than comparison","examples":["gt{OrderLine.Value_Stability,TradeLine.Value_Stability}"]}
+
+{"name":"ge","category":"binary","arity":2,"signature":"ge{arr_a,arr_b}","parameter_types":["array","array"],"description":"Returns 1 where arr_a >= arr_b, otherwise 0.","constraints":[],"semantic_text":"greater equal comparison","examples":["ge{OrderLine.Value_Stability,TradeLine.Value_Stability}"]}
+
+{"name":"tscorr","category":"binary_ts","arity":3,"signature":"tscorr{arr_a,arr_b,window}","parameter_types":["array","array","int"],"description":"Rolling Pearson correlation between two time series over a given window.","constraints":["window > 1","arrays must be aligned in time"],"semantic_text":"time series rolling correlation pearson","examples":["tscorr{OrderLine.BuyVolume,TradeLine.Volume,10}"]}
+
+{"name":"tsregres","category":"binary_ts","arity":3,"signature":"tsregres{arr_a,arr_b,window}","parameter_types":["array","array","int"],"description":"Rolling linear regression of arr_b on arr_a, returning residuals.","constraints":["window > 1","arrays must be aligned in time"],"semantic_text":"rolling regression residual spread","examples":["tsregres{OrderLine.Value_Stability,TradeLine.Value_Stability,20}"]}
+
+{"name":"bitsquantile","category":"binary_ts2","arity":4,"signature":"bitsquantile{arr_a,arr_b,delay,q}","parameter_types":["array","array","int","float"],"description":"Selects values of arr_a corresponding to the q-quantile positions of arr_b within a rolling window.","constraints":["0 < q < 1"],"semantic_text":"cross quantile conditional selection","examples":["bitsquantile{OrderLine.Value,TradeLine.Volume,20,0.9}"]}
+
+{"name":"bitsquantileupmean","category":"binary_ts2","arity":4,"signature":"bitsquantileupmean{arr_a,arr_b,delay,q}","parameter_types":["array","array","int","float"],"description":"Computes the mean of arr_a where arr_b is above the q-quantile within a rolling window.","constraints":["0 < q < 1"],"semantic_text":"conditional upper tail mean","examples":["bitsquantileupmean{OrderLine.Value,TradeLine.Volume,20,0.8}"]}
+
+{"name":"bitsquantiledownmean","category":"binary_ts2","arity":4,"signature":"bitsquantiledownmean{arr_a,arr_b,delay,q}","parameter_types":["array","array","int","float"],"description":"Computes the mean of arr_a where arr_b is below the q-quantile within a rolling window.","constraints":["0 < q < 1"],"semantic_text":"conditional lower tail mean","examples":["bitsquantiledownmean{OrderLine.Value,TradeLine.Volume,20,0.2}"]}

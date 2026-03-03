@@ -1,0 +1,5 @@
+# 忽略 Python 缓存
+__pycache__/
+*.pyc
+*.ipynb
+*.env
